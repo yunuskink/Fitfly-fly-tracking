@@ -3,16 +3,13 @@ function [bw, CC, CC_large] = get_thresholded_flies(im,t_thresh,bwMask,SE, area_
 %it's connected components.  If area_min and area_max are passed in, it
 %gets rid of any cc's that are not in that range.
 
-%Threshold the flies into a binary image and do some basic image
-%processing.
-%[bw] = threshold_flies_adapt(im,t_thresh,bwMask,SE,filt_size, 256);
-%[bw] = threshold_flies(im,t_thresh,bwMask,SE,filt_size);
-[bw] = threshold_flies_adapt(im,t_thresh,bwMask,SE,fsize, background);
+%Threshold the flies into a binary image. 
+im(bwMask==0) = background; 
+im = imcomplement(im);
+bw = adaptivethresh(im,fsize,t_thresh);
+bw(bwMask==0) = 0;
+
 CC = bwconncomp(bw);
-%Get rid of connected components that are the holes in between flies, this gets rid of connected components whose mean
-%intensity in above the right value.
-%intensities = regionprops(CC,im,'MeanIntensity');
-%intensities = find([intensities.MeanIntensity]>t_thresh);
 CC_large = CC;
 areas  = regionprops(CC,'Area');
 areas = cat(1, areas.Area);

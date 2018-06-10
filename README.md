@@ -4,9 +4,9 @@ Author: Yunus Kinkhabwala, 2018
 # Overview
 Please find here code to both record and track the positions of fruit flies as used in the publication "The Density-Functional Fluctuation Theory of Crowds". Several novel approaches to tracking the individual positions of large dense crowds of walking fruit flies are developed here, largely to deal with finding individuals and tracking their identities when they touch and form connected clusters. For the analysis to work, the subfunctions folder must be added to the Matlab path.
 Note that for the most current versions of fly-tracking algorithms, please check the GitHub repository https://github.com/yunuskink/Fly-Tracking. The code here is sufficient to place positions for flies in large groups within the fly itself thus allowing accurate counts of local density as used in the paper.
-Error from this analysis are likely systematic. Flies that are in a large cluster or more likely to be missed. To verify that this does not drastically affect the results of the DFFT analysis, an orthogonal apporoach was developed which used the number of silhouetted pixels in a bin to approximate the discrete number of flies in the bin and the DFFT analysis of videos using these two approaches produced Vexations, v_b, and frustrations, f_N, that were in agreement with each other.
+Error from this analysis are systematic but negligible for our analysis. Flies that are in a large cluster are more likely to be missed. To verify that this does not drastically affect the results of the DFFT analysis, an orthogonal apporoach was developed which used the number of silhouetted pixels in a bin, along with knowledge of the total number of flies in a chamber, to approximate the discrete number of flies in the bin. The DFFT analysis of videos using these two approaches produced Vexations, v_b, and frustrations, f_N, that were in agreement with each other, while this method was chosen largely to avoid errors due to differing sizes of flies, especially in mixed gender experiments.
 
-This code according to my analysis outperformed other fly-tracking algorithms for accurately separating flies in a cluster, which is its intended goal, but is far too noisy to track the identity of flies. To do so, I have developed another approach which uses frame-by-frame image correlation to keep track of the identity of flies even as they mate and form clusters over many minutes. This more accurate but much slower and beta code will be soon published to the GitHub link https://github.com/yunuskink/Fly-Tracking.
+This code, according to my analysis, outperformed other fly-tracking algorithms for accurately separating flies in clusters but is far too noisy to track the identity of flies. To do so, I have developed another approach which uses frame-by-frame image correlation to keep track of the identity of flies even as they mate and form clusters over many minutes. This more accurate, but much slower, code will be soon published to the GitHub link https://github.com/yunuskink/Fly-Tracking.
 
 # System Requirements
 
@@ -27,6 +27,7 @@ All code is written in Matlab and tested on MatLab version R2017b. Code used for
 The package has been tested on the following systems:
 
 Linux: 
+
 Mac OSX:  
 
 Windows: Windows 10 Pro
@@ -34,44 +35,67 @@ Windows: Windows 10 Pro
 # Instructions and Demo:
 First, be sure to add the 'subfunctions' folder to your Matlab path.
 
-###EXTRACTING PARAMS:
+##EXTRACTING PARAMS:
+
 In order to track the flies from a video, a number of parameters must be set for thresholding the fly silhouettes.
 Follow the steps below to extract your own set of parameters for the sample video.
-1) Run the script 'get_video_params'. You can do so simply by opening the script and clicking the green arrow for the "run" button.
-2) User is prompted to choose the video file. For the example provided, open the 'test_mv.avi' file.
-3) User is now promted whether a params structure has already been created before. If so, click yes to open the params matlab .m file. For this set of instructions, click 'No'.
+1. Run the script 'get_video_params'. You can do so simply by opening the script and clicking the green arrow for the "run" button.
+1. User is prompted to choose the video file. For the example provided, open the 'test_mv.avi' file.
+1. User is now promted whether a params structure has already been created before. If so, click yes to open the params matlab .m file. For this set of instructions, click 'No'.
 4) User is prompted for whether a new mask is needed. Click 'Yes'.
 5) Draw a boundary polygon around the part of the chamber the flies are allowed to be in. Be certain NOT to exclude any parts of the chamber. Double click the polygon once finished.
 6) User is prompted whether the mask is good enough. Click 'No, you try it'. Code will now take a minute to collect images from the movie to create a background.
 7) User is now prompted with a vertical slider to control the boundary of the mask. Move the slider until the boundary is completely selected without any black spots inside of the arena. Then click 'Done'.
 8) User now has the option to modify several different parameters to control the threshholding of the video. Adjust these parameters and click 'Update Images' to see a red binary image overlaid on the flies which indicates which pixels of the images satisfy these parameters.
-####PARAMETERS:
-######Threshold slider:
+
+**PARAMETERS:**
+
+**Threshold slider:**
+
 Slide the slider to adjust the threshold needed to label a fly. Ideally, only fly bodies without legs or wings should be selected, but try to make sure fly heads are not separated from their bodies.
-######Filter size:
+
+**Filter size:**
+
 To accomodate uneven background lighting, an adaptive threshold is used where local average intensity is used to define the threshhold. Values around 5 times the length of a fly in pixels is usually enough.
-######Background:
+
+**Background:**
+
 For the adaptive threshold, an average background value must be assigned to the image around the perimeter of the chamber. The recommended value is sufficient, but if flies on the edge are labelled differently than in the center, then this value can be adjusted.
-######:Min Area
+
+**Min Area:**
+
 The smallest area allowed for a fly. Clusters smaller than this value will be discared. In units of pixels. Generally, this value is not so important but useful for removing contaminants.
-######:Max Area
+
+**Max Area:**
+
 The largest area allowed for a fly. Clusters larger than this value will attempt to be separated. In units of pixels. This value is more important than the previous one. Use the 'fly sizes' button to see a histogram of the sizes of the flies which are found according to the current parameters. Adjust this parameter until there are no clusters of flies labelled.
-######:Max Displacement
+
+**Max Displacement:**
+
 Not used for this analysis.
-####GUI BUTTONS:
-######DONE:
+
+##GUI BUTTONS:
+**DONE:**
+
 Click when all parameters are set and the flies are counted.
-######COUNT FLIES:
+
+**COUNT FLIES:**
+
 Brings up a sample image of the experiment. User can click on the flies to count them. Once a click has been recorded for each fly, user should right click to end the counting and the total number of flies will be shown in the GUI
-######UPDATE IMAGES:
+
+**UPDATE IMAGES:**
+
 Click to update the labelling of the four sample images according to the current parameters.
-######FLY SIZES:
+
+**FLY SIZES:**
+
 Click to create a figure showing the histogram of the sizes of the flies. 
 
 9) User will now be prompted to find new fitflies. Click 'yes'. The fitflies, an average of what a fly looks like, will be generated, this may take 1-2 minutes.
+
 10) User will now be prompted where to save the 'params' structure which contains the parameters defined above and which can now be used to track flies in the code 'fitfly_video_tracking'.
 
-###TRACKING FLIES:
+#TRACKING FLIES:
 In order to track the flies from a video...
 
 1) run the script 'fitfly_video_tracking'.

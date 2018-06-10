@@ -35,18 +35,18 @@ Windows: Windows 10 Pro
 # Instructions and Demo:
 First, be sure to add the 'subfunctions' folder to your Matlab path.
 
-##EXTRACTING PARAMS:
+**EXTRACTING PARAMS:**
 
 In order to track the flies from a video, a number of parameters must be set for thresholding the fly silhouettes.
 Follow the steps below to extract your own set of parameters for the sample video.
 1. Run the script 'get_video_params'. You can do so simply by opening the script and clicking the green arrow for the "run" button.
 1. User is prompted to choose the video file. For the example provided, open the 'test_mv.avi' file.
 1. User is now promted whether a params structure has already been created before. If so, click yes to open the params matlab .m file. For this set of instructions, click 'No'.
-4) User is prompted for whether a new mask is needed. Click 'Yes'.
-5) Draw a boundary polygon around the part of the chamber the flies are allowed to be in. Be certain NOT to exclude any parts of the chamber. Double click the polygon once finished.
-6) User is prompted whether the mask is good enough. Click 'No, you try it'. Code will now take a minute to collect images from the movie to create a background.
-7) User is now prompted with a vertical slider to control the boundary of the mask. Move the slider until the boundary is completely selected without any black spots inside of the arena. Then click 'Done'.
-8) User now has the option to modify several different parameters to control the threshholding of the video. Adjust these parameters and click 'Update Images' to see a red binary image overlaid on the flies which indicates which pixels of the images satisfy these parameters.
+1. User is prompted for whether a new mask is needed. Click 'Yes'.
+1. Draw a boundary polygon around the part of the chamber the flies are allowed to be in. Be certain NOT to exclude any parts of the chamber. Double click the polygon once finished.
+1. User is prompted whether the mask is good enough. Click 'No, you try it'. Code will now take a minute to collect images from the movie to create a background.
+1. User is now prompted with a vertical slider to control the boundary of the mask. Move the slider until the boundary is completely selected without any black spots inside of the arena. Then click 'Done'.
+1. User now has the option to modify several different parameters to control the threshholding of the video. Adjust these parameters and click 'Update Images' to see a red binary image overlaid on the flies which indicates which pixels of the images satisfy these parameters.
 
 **PARAMETERS:**
 
@@ -74,7 +74,8 @@ The largest area allowed for a fly. Clusters larger than this value will attempt
 
 Not used for this analysis.
 
-##GUI BUTTONS:
+_**GUI BUTTONS:**_
+
 **DONE:**
 
 Click when all parameters are set and the flies are counted.
@@ -95,7 +96,7 @@ Click to create a figure showing the histogram of the sizes of the flies.
 
 10) User will now be prompted where to save the 'params' structure which contains the parameters defined above and which can now be used to track flies in the code 'fitfly_video_tracking'.
 
-#TRACKING FLIES:
+**TRACKING FLIES:**
 In order to track the flies from a video...
 
 1) run the script 'fitfly_video_tracking'.
@@ -104,21 +105,28 @@ In order to track the flies from a video...
 4) Analysis will now commence and, every 10 frames, the current image will be shown overlaid with the labelled positions as determined from the code. This takes about one frame per second, but with video with fewer clusters or at lower resolution, this can perform much faster. Flies labelled in blue are found with traditional thresholding and morphological operations. Flies labelled in red and green are obtained through the fitfly method.
 5) Once analysis is finished, user will be prompted for a place to save the results.
 
-##OUT PUT RESULTS:
+**OUTPUT RESULTS:**
 The 'ResMat' variable output from the analysis contains the position determined for every fly. Each row corresponds to a new observations. The data is organized as follows.
-####ResMat Dimensions:
+
+
+_ResMat Dimensions:_
+
 Column 1: Time
+
 Column 2: x-position
+
 Column 3: y-position
+
 Column 4+: Reserved for further information and analysis such as identity labels.
 
-#Realtime Analysis:
+**Realtime Analysis:**
+
 To increase the workflow of the experiment, the 'Track_flies_realtime' function is designed to collect an image and perform the above analysis on the image before proceeding to collect a subsequent image. When tracked this way, only one image every 20 seconds is saved to monitor the quality of the tracking algorithm and only the positions are returned. Due to varying image analysis times, the subsequent results must be downsampled, e.g. choosing the observations nearest regular time intervals, to avoid systematic bias.
 
-##Getting params in realtime:
+**Getting params in realtime:**
 Set up your experimental apparatus and a sample population of flies, then run 'get_params_realtime'. Wait for the camera to collect several test images, then proceed larely as described above to determine the best parameters for the experiment.
 
-##Tracking flies in realtime:
+**Tracking flies in realtime:**
 Once you have your params function, run 'Track_flies_realtime'. You will be given a chance to align your experimental chamber with the mask you determined in the params. Then press 'Done' and every 20 seconds and updated file containt the 'ResMat' structure as described above will be save for the entire experiment until you stop MatLab with the Crtl-C command for example.
 
 

@@ -51,7 +51,7 @@ end
 
 fitfly_edge = round(255*fitfly_edge./max(fitfly_edge(:)));
 fitfly_whole = round(255*fitfly_whole./max(fitfly_whole(:)));
-fitfly_edge(fitfly_edge<200)=0; fitfly_whole(fitfly_whole<200)=0;
+fitfly_edge(fitfly_edge<100)=0; fitfly_whole(fitfly_whole<100)=0;
 
 fitflies_edge = {};
 fitflies_whole = {};

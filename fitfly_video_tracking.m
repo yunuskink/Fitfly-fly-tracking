@@ -63,7 +63,6 @@ while hasFrame(mv)
             ResMat_temp3 = [t*ones(N_flies_found,1), pos(:,1), pos(:,2), flag*ones(N_flies_found,1), i*ones(N_flies_found,1),0*ones(N_flies_found,1),0*ones(N_flies_found,1),0*ones(N_flies_found,1),NaN*ones(N_flies_found,1)];
         end
     end
-    
     ResMat_temp2 = zeros(length(CC),5);
     ResMat_temp2(:,1) = t;
     ResMat_temp2(1,4) = flag;
@@ -75,10 +74,22 @@ while hasFrame(mv)
         ResMat_temp2(j,9) = length(CC{j});
     end
     ResMat = [ResMat; ResMat_temp; ResMat_temp2; ResMat_temp3];
-    if ~mod(iter,3)
+    if ~mod(iter,10)
        save('temp','ResMat') 
        sum(ResMat(:,1)==t)
-       figure;imagesc(frame);hold on;colormap('gray');scatter(ResMat(ResMat(:,1)==t,2),ResMat(ResMat(:,1)==t,3),'r*');drawnow
+       imagesc(frame);hold on;colormap('gray');
+       if ~isempty(ResMat_temp)
+       scatter(ResMat_temp(:,2),ResMat_temp(:,3),'r*');
+       end
+       if ~isempty(ResMat_temp2)
+       scatter(ResMat_temp2(:,2),ResMat_temp2(:,3),'b*');
+       end
+       if ~isempty(ResMat_temp3)
+       scatter(ResMat_temp3(:,2),ResMat_temp3(:,3),'g*');
+       end
+       %figure;subplot(1,2,1);imagesc(frame);subplot(1,2,2);imagesc(bw)
+       hold off;
+       drawnow
     end
 end
 

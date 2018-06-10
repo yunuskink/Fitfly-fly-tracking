@@ -13,9 +13,8 @@ fly = imtranslate(fly,[round(offset(1)-fly_x/2),round(offset(2)-fly_y/2)],'FillV
 
 fly = fly(1:size(im,1),1:size(im,2));
 
+rmv = 
 
-%rmv = imerode(fly>min_thresh,strel('disk',2));
-%im(rmv) = 0;
 im(fly>min_thresh) = 0;
 
 L = bwlabel(im);

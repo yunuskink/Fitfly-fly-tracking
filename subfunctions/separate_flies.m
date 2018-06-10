@@ -72,10 +72,13 @@ for i=1:N_flies %For each fly we need to find
         %Now remove the fly from the images of the whole flies and edges. The
         %rot(90,...,2) is there because of the way a convolution works.
         
-        [cluster_whole{ind}] = remove_fly(cluster_whole{ind},rot90(fitflies_whole{angle},2),pos(end,:),50,area_min);
+        %figure;subplot(1,2,1);imagesc(fitflies_whole{angle});subplot(1,2,2); imagesc(cluster_whole{ind});hold on; scatter(pos(i,1),pos(i,2),'r*');waitforbuttonpress;
+        
+        [cluster_whole{ind}] = remove_fly(cluster_whole{ind},rot90(fitflies_whole{angle},2),pos(end,:),100,area_min);
         cluster_edge{ind} = bwmorph(cluster_whole{ind},'remove');
         
-        %figure;imagesc(fitflies_whole{angle});figure; imagesc(cluster_whole{ind});hold on; scatter(pos(i,1),pos(i,2));waitforbuttonpress;
+        %%%%%%%DEBUGGING
+        
         
         %Now update the cross correlations
         [C_whole] = cross_correlation(cluster_whole{ind},fitflies_whole,cluster_whole{ind}); %Convolve with whole flies
